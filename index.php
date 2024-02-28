@@ -2,8 +2,8 @@
 $uppercase="ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 $lowercase="abcdefghijklmnopqrstuvwxyz";
 $number="0123456789";
-$symbol="!@#$%^&*()-_+={}[]|:;<>.?/";
-$characters= "";
+$symbol="!@#$%^&*()-_+={}[]|:;.?/";
+$characters= $lowercase;
 
 $selected = !empty($_GET);
     if ($selected) {
@@ -11,29 +11,50 @@ $selected = !empty($_GET);
 $length= (int) $_GET["length"];
 echo ("lunghezza " . $length);
 
-if ( $length > 8 ){ 
-    $include_symbols=$_GET["symbols"];
-    echo("simboli " . $include_symbols);
-    $include_numbers=$_GET["numbers"];
-    echo("numeri " . $include_numbers);
-    $include_uppercase=$_GET["uppercase"];
-    echo("maiuscole " . $include_uppercase); 
-}
+    // IF
+    if ( $length > 8 ){ 
+        $include_symbols=$_GET["symbols"];
+        echo("simboli " . $include_symbols);
+        $include_numbers=$_GET["numbers"];
+        echo("numeri " . $include_numbers);
+        $include_uppercase=$_GET["uppercase"];
+        echo("maiuscole " . $include_uppercase); 
+        $generated = generate_password($length,$characters,$symbol,$number,$uppercase,$include_symbols,$include_numbers,$include_uppercase);
+        var_dump("Generata", $generated);
+    }};
+    
+// FUNZIONE
+function generate_password($length,$characters,$symbol,$number,$uppercase,$include_symbols,$include_numbers,$include_uppercase) {
+    $password=[];
+    if ( $include_symbols == "on" ) {  
+        echo ("simboli");
+        $characters .= $symbol;
+    };
+    if ( $include_numbers == "on" ) {
+        echo ("numbers");
+        $characters .= $number;
+    };
+    if ( $include_uppercase == "on" ) {
+        echo ("uppercase");
+        $characters .= $uppercase;
+    };
+    
+    echo ("caratteri consentiti " . $characters);
+    
+        while (count($password) < $length) {
+            $random = rand(0, strlen($characters) - 1);
+            $password[] = $characters[$random];
+        };
 
-// function generate_password($length,$symbol,$include_symbols,$include_numbers){
-// $password= [];
-// if ( $include_symbols == "on" ) {$characters = array_merge($characters,$symbol)};
-// if ( $include_numbers == "on" ) {$characters = array_merge($characters,$number)};
-// if ( $include_uppercase == "on" ) {$characters = array_merge($characters,$uppercase)};
+    echo $password;
+    return implode("",$password);    
+};
 
-//     while (count($password) < $length) {
-//         $random = rand(0, count($characters) - 1);
-//         $password[] = $characters[$random];
-// }
-// return implode("",$password);
-//     }}
-}
-// echo $password;
+
+
+
+
+
 ?>
 
 
